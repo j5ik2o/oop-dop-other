@@ -4,5 +4,5 @@ enum ItemType {
   case Generic
   case Download
   case Car
-  case Other
+  case ElectricParts
 }
