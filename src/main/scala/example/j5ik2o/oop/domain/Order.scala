@@ -1,7 +1,6 @@
 package example.j5ik2o.oop.domain
 
-import example.j5ik2o.common.domain.{ ItemType, OrderId }
-import example.j5ik2o.oop.domain.{ Item, Money, OrderItems, Price }
+import example.j5ik2o.common.domain.{ItemType, OrderId}
 
 final case class Order(id: OrderId, orderItems: OrderItems) {
 
