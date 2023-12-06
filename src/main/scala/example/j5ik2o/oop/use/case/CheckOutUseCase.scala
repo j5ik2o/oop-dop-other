@@ -1,7 +1,7 @@
 package example.j5ik2o.oop.use.`case`
 
 import example.j5ik2o.common.domain.CartId
-import example.j5ik2o.oop.domain.{ CartRepository, OrderRepository }
+import example.j5ik2o.oop.domain.{CartRepository, OrderRepository}
 import example.j5ik2o.oop.infrastructure.PaymentGateway
 
 class CheckOutUseCase(
@@ -10,9 +10,17 @@ class CheckOutUseCase(
     val paymentGateway: PaymentGateway
 ) {
   def execute(cartId: CartId): Unit = {
-    val cart  = cartRepository.findById(cartId)
-    val order = cart.getOrder
+    // カートの取得
+    val cart = cartRepository.findById(cartId)
+
+    // カートのチェックアウト
+    val (order, cartUpdated) = cart.checkOut
+    // 支払い処理
     paymentGateway.pay(order.totalPrice)
+
+    // 注文の保存
     orderRepository.store(order)
+    // カートの更新
+    cartRepository.store(cartUpdated)
   }
 }
