@@ -1,7 +1,6 @@
 package example.j5ik2o.oop.domain
 
 import example.j5ik2o.common.domain.OrderItemId
-import example.j5ik2o.oop.domain.{ Item, OrderItem, Price }
 
 import scala.annotation.targetName
 
