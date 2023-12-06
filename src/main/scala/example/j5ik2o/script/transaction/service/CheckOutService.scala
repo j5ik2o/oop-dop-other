@@ -6,6 +6,7 @@ import example.j5ik2o.script.transaction.model.{Order, OrderItem, Price}
 
 import scala.collection.mutable.ArrayBuffer
 
+// カートをチェックアウトするサービス
 class CheckOutService(val cartDao: CartDao, val orderDao: OrderDao, val paymentGateway: PaymentService) {
 
   def checkOut(cartId: CartId): Unit = {

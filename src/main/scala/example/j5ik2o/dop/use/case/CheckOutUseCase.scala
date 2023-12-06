@@ -4,6 +4,7 @@ import example.j5ik2o.common.domain.CartId
 import example.j5ik2o.dop.domain.{Cart, CartRepository, Order, OrderRepository}
 import example.j5ik2o.dop.infrastructure.PaymentGateway
 
+// カートをチェックアウトするサービス
 class CheckOutUseCase(
     val cartRepository: CartRepository,
     val orderRepository: OrderRepository,
