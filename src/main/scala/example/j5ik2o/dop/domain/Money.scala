@@ -1,23 +1,14 @@
 package example.j5ik2o.dop.domain
 
-import example.j5ik2o.dop.domain.Money
+import java.util.{Currency, Locale}
 
-import java.util.{ Currency, Locale }
-import scala.annotation.targetName
-
-case class Money(amount: BigDecimal, currency: Currency) // extends Ordered[Money] {
-//
-//  override def compare(that: Money): Int = {
-//    require(currency == that.currency)
-//    amount.compare(that.amount)
-//  }
-//}
+final case class Money(amount: BigDecimal, currency: Currency)
 
 object Money {
   val DefaultCurrency: Currency = Currency.getInstance(Locale.getDefault)
   val JPY: Currency             = Currency.getInstance("JPY")
 
-  given Ordering[Money] = (x: Money, y: Money) => {
+  given ordering: Ordering[Money] = (x: Money, y: Money) => {
     require(x.currency == y.currency)
     x.amount.compare(y.amount)
   }
