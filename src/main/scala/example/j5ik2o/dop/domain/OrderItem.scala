@@ -1,6 +1,26 @@
 package example.j5ik2o.dop.domain
 
-import example.j5ik2o.common.domain.{ OrderItemId, Quantity }
-import example.j5ik2o.dop.domain.Item
+opaque type OrderItem = Map[String, Any]
+opaque type OrderItemId = String
 
-final case class OrderItem(id: OrderItemId, item: Item, quantity: Quantity)
+object OrderItemId {
+  def apply(value: String): OrderItemId = value
+
+  def unapply(self: OrderItemId): Option[String] = Some(self)
+
+  def toString(self: OrderItemId): String = self
+}
+
+object OrderItem {
+
+  def apply(id: OrderItemId, item: Item, quantity: Quantity): OrderItem = {
+    Map("id" -> id, "item" -> item, "quantity" -> quantity)
+  }
+
+  def id(self: OrderItem): OrderItemId = self("id").asInstanceOf[OrderItemId]
+
+  def item(self: OrderItem): Item = self("item").asInstanceOf[Item]
+
+  def quantity(self: OrderItem): Quantity = self("quantity").asInstanceOf[Quantity]
+
+}

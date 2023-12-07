@@ -1,7 +1,6 @@
 package example.j5ik2o.dop.use.`case`
 
-import example.j5ik2o.common.domain.CartId
-import example.j5ik2o.dop.domain.{Cart, CartRepository, Order, OrderRepository}
+import example.j5ik2o.dop.domain.*
 import example.j5ik2o.dop.infrastructure.PaymentGateway
 
 // カートをチェックアウトするサービス
@@ -16,6 +15,7 @@ class CheckOutUseCase(
 
     // カートのチェックアウト
     val (order, cartUpdated) = Cart.checkOut(cart)
+
     // 支払い処理
     paymentGateway.pay(Order.totalPrice(order))
 

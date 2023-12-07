@@ -1,25 +1,44 @@
 package example.j5ik2o.dop.domain
 
-import example.j5ik2o.common.*
-import example.j5ik2o.common.domain.*
-import example.j5ik2o.dop.*
+opaque type Cart = Map[String, Any]
+opaque type CartId = String
 
-final case class Cart(id: CartId, cartItems: CartItems, checkOuted: Boolean = false)
+object CartId {
+  def apply(value: String): CartId = value
+
+  def unapply(self: CartId): Option[String] = Some(self)
+
+  def toString(self: CartId): String = self
+}
 
 object Cart {
+
+  def apply(id: CartId, name: String, cartItems: Vector[CartItem]): Cart =
+    Map("id" -> id, "name" -> name, "cartItems" -> cartItems, "checkOuted" -> false)
+
+  def name(self: Cart): String = self("name").asInstanceOf[String]
+
   def add(self: Cart, cartItemId: CartItemId, item: Item, quantity: Quantity): Cart = {
     val cartItem = CartItem(cartItemId, item, quantity)
-    self.copy(cartItems = CartItems.add(self.cartItems, cartItem))
+    self + ("cartItems" -> (cartItems(self) :+ cartItem))
   }
 
   def remove(self: Cart, cartItemId: CartItemId): Cart = {
-    self.copy(cartItems = CartItems.remove(self.cartItems, cartItemId))
+    self + ("cartItems" -> cartItems(self).filterNot { cartItem => CartItem.id(cartItem) == cartItemId })
   }
 
   def checkOut(self: Cart): (Order, Cart) = {
-    val orderItems = CartItems.toVector(self.cartItems).map { cartItem =>
-      OrderItem(OrderItemId(cartItem.id.value), cartItem.item, cartItem.quantity)
-    }
-    (Order(OrderId(self.id.value), OrderItems(orderItems)), self.copy(checkOuted = true))
+    val orderItems = Cart
+      .cartItems(self).map { cartItem =>
+        val cartItemId = CartItem.id(cartItem)
+        OrderItem(cartItemId.asInstanceOf[OrderItemId], CartItem.item(cartItem), CartItem.quantity(cartItem))
+      }.toVector
+    val orderId = id(self)
+    (Order(orderId.asInstanceOf[OrderId], orderItems), self + ("checkOuted" -> true))
   }
+
+  def id(self: Cart): CartId = self("id").asInstanceOf[CartId]
+
+  def cartItems(self: Cart): Seq[CartItem] = self("items").asInstanceOf[Seq[CartItem]]
+
 }

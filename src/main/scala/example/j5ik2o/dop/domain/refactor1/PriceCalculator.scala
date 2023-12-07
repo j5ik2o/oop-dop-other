@@ -1,33 +1,33 @@
 package example.j5ik2o.dop.domain.refactor1
 
 import example.j5ik2o.common.domain.ItemType
-import example.j5ik2o.dop.domain.{Item, Money, Price}
+import example.j5ik2o.dop.domain.{Item, Money}
 
 object PriceCalculator {
-  def adjustPrice(item: Item): Price = {
+  def adjustPrice(item: Item): Money = {
     val basePrice    = calculateBasePrice(item)
     val shippingCost = calculateShippingCost(item)
     val discount     = calculateDiscount(item)
     val tax          = calculateTax(item)
-    Price.plus(Price.minus(Price.plus(basePrice, shippingCost), discount), tax)
+    Money.plus(Money.minus(Money.plus(basePrice, shippingCost), discount), tax)
   }
 
-  private def calculateBasePrice(item: Item): Price = item.price
+  private def calculateBasePrice(item: Item): Money = Item.price(item)
 
-  private def calculateShippingCost(item: Item): Price = item.itemType match {
-    case ItemType.Download => Price.zero()
-    case ItemType.Car      => Price(Money(50000))
-    case _                 => Price.times(item.price, 0.1)
+  private def calculateShippingCost(item: Item): Money = Item.itemType(item) match {
+    case ItemType.Download => Money.zero()
+    case ItemType.Car => Money(50000)
+    case _ => Money.times(Item.price(item), 0.1)
   }
 
-  private def calculateDiscount(item: Item): Price = item.price.value.amount match {
-    case amount if amount >= 10000 => Price.times(item.price, 0.1)
-    case amount if amount >= 5000  => Price.times(item.price, 0.05)
-    case _                         => Price.zero()
+  private def calculateDiscount(item: Item): Money = Money.amount(Item.price(item)) match {
+    case amount if amount >= 10000 => Money.times(Item.price(item), 0.1)
+    case amount if amount >= 5000 => Money.times(Item.price(item), 0.05)
+    case _ => Money.zero()
   }
 
-  private def calculateTax(item: Item): Price = item.itemType match {
-    case ItemType.Car => Price.times(item.price, 0.2)
-    case _            => Price.times(item.price, 0.1)
+  private def calculateTax(item: Item): Money = Item.itemType(item) match {
+    case ItemType.Car => Money.times(Item.price(item), 0.2)
+    case _ => Money.times(Item.price(item), 0.1)
   }
 }
