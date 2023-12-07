@@ -1,7 +1,7 @@
 package example.j5ik2o.dop.domain.refactor2
 
-import example.j5ik2o.common.domain.OrderId
 import example.j5ik2o.dop.domain.{Money, OrderItem, Quantity}
+import example.j5ik2o.oop.domain.OrderId
 
 opaque type Order = Map[String, Any]
 opaque type OrderId = String

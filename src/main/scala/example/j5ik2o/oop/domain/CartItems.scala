@@ -1,7 +1,5 @@
 package example.j5ik2o.oop.domain
 
-import example.j5ik2o.common.domain.CartItemId
-
 import scala.annotation.targetName
 
 final case class CartItems(values: Vector[CartItem]) {

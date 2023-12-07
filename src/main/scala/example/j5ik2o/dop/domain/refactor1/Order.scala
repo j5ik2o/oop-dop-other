@@ -1,8 +1,8 @@
 package example.j5ik2o.dop.domain.refactor1
 
 import example.j5ik2o.common
-import example.j5ik2o.common.domain.OrderId
 import example.j5ik2o.dop.domain.{Money, OrderItem, Quantity}
+import example.j5ik2o.oop.domain.OrderId
 
 type Order = Map[String, Any]
 type OrderId = String

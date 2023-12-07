@@ -1,8 +1,6 @@
 package example.j5ik2o.oop.domain
 
-import example.j5ik2o.oop.domain.Money
-
-import java.util.{ Currency, Locale }
+import java.util.{Currency, Locale}
 import scala.annotation.targetName
 
 case class Money(amount: BigDecimal, currency: Currency) extends Ordered[Money] {
@@ -42,5 +40,5 @@ object Money {
     Money(amount, Currency.getInstance(currency))
   }
 
-  def zero(currency: Currency): Money = Money(0, currency)
+  def zero(currency: Currency = DefaultCurrency): Money = Money(0, currency)
 }

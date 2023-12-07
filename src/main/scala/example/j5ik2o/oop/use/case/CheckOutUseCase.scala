@@ -1,7 +1,6 @@
 package example.j5ik2o.oop.use.`case`
 
-import example.j5ik2o.common.domain.CartId
-import example.j5ik2o.oop.domain.{CartRepository, OrderRepository}
+import example.j5ik2o.oop.domain.{CartId, CartRepository, OrderRepository}
 import example.j5ik2o.oop.infrastructure.PaymentGateway
 
 // カートをチェックアウトするサービス

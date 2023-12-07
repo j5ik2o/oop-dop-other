@@ -1,7 +1,5 @@
 package example.j5ik2o.oop.domain
 
-import example.j5ik2o.common.domain.OrderItemId
-
 import scala.annotation.targetName
 
 final case class OrderItems(values: Vector[OrderItem]) {
@@ -14,8 +12,8 @@ final case class OrderItems(values: Vector[OrderItem]) {
 
   def toVector: Vector[OrderItem] = values
 
-  def calculateTotalPrice(adjustPrice: Item => Price = _.price): Price =
-    values.foldLeft(Price.zero()) { (acc, orderItem) =>
-      acc + adjustPrice(orderItem.item) * orderItem.quantity
+  def calculateTotalPrice(adjustPrice: Item => Money = _.price): Money =
+    values.foldLeft(Money.zero()) { (acc, orderItem) =>
+      acc + adjustPrice(orderItem.item) * orderItem.quantity.value
     }
 }

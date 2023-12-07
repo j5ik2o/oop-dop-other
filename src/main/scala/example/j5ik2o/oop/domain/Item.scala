@@ -1,6 +1,6 @@
 package example.j5ik2o.oop.domain
 
-import example.j5ik2o.common.domain.{ItemId, ItemName, ItemType}
+import example.j5ik2o.common.domain.ItemType
 
 sealed trait Item {
   def id: ItemId
@@ -9,30 +9,30 @@ sealed trait Item {
 
   def name: ItemName
 
-  def price: Price
+  def price: Money
 }
 
 object Item {
-  final case class GenericItem(id: ItemId, name: ItemName, price: Price) extends Item {
+  final case class GenericItem(id: ItemId, name: ItemName, price: Money) extends Item {
     override val itemType: ItemType = ItemType.Generic
   }
 
-  final case class DownloadableItem(id: ItemId, name: ItemName, price: Price) extends Item {
+  final case class DownloadableItem(id: ItemId, name: ItemName, price: Money) extends Item {
     override val itemType: ItemType = ItemType.Download
   }
 
-  final case class CarItem(id: ItemId, name: ItemName, price: Price) extends Item {
+  final case class CarItem(id: ItemId, name: ItemName, price: Money) extends Item {
     override val itemType: ItemType = ItemType.Car
   }
 
-  final case class ElectricPartItem(id: ItemId, name: ItemName, price: Price) extends Item {
+  final case class ElectricPartItem(id: ItemId, name: ItemName, price: Money) extends Item {
     override val itemType: ItemType = ItemType.ElectricParts
   }
 
   final case class ElectricAssemblyItem(id: ItemId, name: ItemName, parts: Vector[ElectricPartItem]) extends Item {
     override val itemType: ItemType = ItemType.ElectricParts
 
-    override def price: Price = parts.foldLeft(Price.zero()) { (acc, part) =>
+    override def price: Money = parts.foldLeft(Money.zero()) { (acc, part) =>
       acc + part.price
     }
 

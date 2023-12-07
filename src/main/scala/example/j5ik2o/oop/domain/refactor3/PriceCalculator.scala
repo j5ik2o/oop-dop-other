@@ -3,7 +3,7 @@ package example.j5ik2o.oop.domain.refactor3
 import example.j5ik2o.common
 import example.j5ik2o.common.domain
 import example.j5ik2o.common.domain.ItemType
-import example.j5ik2o.oop.domain.{Item, Money, Price}
+import example.j5ik2o.oop.domain.{Item, Money}
 
 object PriceCalculator {
   // 送料や割引や税率を考慮した価格を返す
@@ -14,34 +14,34 @@ object PriceCalculator {
   // - 商品の価格が5000円以上なら5%割引
   // - 商品の価格が5000円未満なら割引なし
   // - 税率は商品価格の10%。ただし車の場合は贅沢税が20%掛かる
-  def adjustPrice(item: Item): Price =
+  def adjustPrice(item: Item): Money =
     calculateShippingCost(calculateDiscount(calculateTax(calculateBasePrice)))(item)
 
-  private def calculateBasePrice(item: Item): Price = item.price
+  private def calculateBasePrice(item: Item): Money = item.price
 
-  private def calculateShippingCost(baseCalculation: Item => Price)(item: Item): Price = {
+  private def calculateShippingCost(baseCalculation: Item => Money)(item: Item): Money = {
     val basePrice = baseCalculation(item)
     basePrice + (item.itemType match {
-      case ItemType.Download => Price.zero()
-      case ItemType.Car      => Price(Money(50000))
+      case ItemType.Download => Money.zero()
+      case ItemType.Car => Money(50000)
       case _                 => item.price * 0.1
     })
   }
 
-  private def calculateDiscount(baseCalculation: Item => Price)(item: Item): Price = {
+  private def calculateDiscount(baseCalculation: Item => Money)(item: Item): Money = {
     val basePrice = baseCalculation(item)
-    basePrice - (item.price.value.amount match {
+    basePrice - (item.price.amount match {
       case amount if amount >= 10000 => item.price * 0.1
       case amount if amount >= 5000  => item.price * 0.05
-      case _                         => Price.zero()
+      case _ => Money.zero()
     })
   }
 
-  private def calculateTax(baseCalculation: Item => Price)(item: Item): Price = {
+  private def calculateTax(baseCalculation: Item => Money)(item: Item): Money = {
     val basePrice = baseCalculation(item)
     basePrice + (item.itemType match {
       case domain.ItemType.Car => item.price * 0.2
-      case _                           => item.price * 0.1
+      case _ => item.price * 0.1
     })
   }
 }
