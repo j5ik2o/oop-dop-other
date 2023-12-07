@@ -9,6 +9,8 @@ object Quantity {
     Map("value" -> value)
   }
 
-  def value(self: Quantity): Int = self("value").asInstanceOf[Int]
+  extension (self: Quantity) {
+    def value: Int = self("value").asInstanceOf[Int]
+  }
 
 }

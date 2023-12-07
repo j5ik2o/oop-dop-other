@@ -1,6 +1,7 @@
 package example.j5ik2o.dop.domain
 
 import java.util.{Currency, Locale}
+import scala.annotation.targetName
 
 opaque type Money = Map[String, Any]
 
@@ -17,11 +18,6 @@ object Money {
 
   def zero(currency: Currency = DefaultCurrency): Money = Money(0, currency)
 
-  def plus(self: Money, other: Money): Money = {
-    require(currency(self) == currency(other))
-    Money(amount(self) + amount(other), currency(self))
-  }
-
   def apply(amount: BigDecimal, currency: Currency = DefaultCurrency): Money = {
     require(amount >= 0)
     Map("amount" -> amount, "currency" -> currency)
@@ -31,18 +27,30 @@ object Money {
     Money(amount, Currency.getInstance(currency))
   }
 
-  def amount(self: Money): BigDecimal = self("amount").asInstanceOf[BigDecimal]
+  extension (self: Money) {
+    def amount: BigDecimal = self("amount").asInstanceOf[BigDecimal]
+    def currency: Currency = self("currency").asInstanceOf[Currency]
 
-  def currency(self: Money): Currency = self("currency").asInstanceOf[Currency]
+    @targetName("plus")
+    infix def +(other: Money): Money = {
+      require(currency == other.currency)
+      Money(amount + other.amount, currency)
+    }
 
-  def minus(self: Money, other: Money): Money = {
-    require(currency(self) == currency(other))
-    Money(amount(self) - amount(other), currency(self))
+    @targetName("minus")
+    infix def -(other: Money): Money = {
+      require(currency == other.currency)
+      Money(amount - other.amount, currency)
+    }
+
+    @targetName("times")
+    infix def *(multiplier: Int): Money = Money(amount * multiplier, currency)
+
+    @targetName("times")
+    infix def *(multiplier: Double): Money = Money(amount * multiplier, currency)
+
+    def toBigDecimal: BigDecimal = amount
+
   }
 
-  def times(self: Money, multiplier: Int): Money = Money(amount(self) * multiplier, currency(self))
-
-  def times(self: Money, multiplier: Double): Money = Money(amount(self) * multiplier, currency(self))
-
-  def toBigDecimal(self: Money): BigDecimal = amount(self)
 }

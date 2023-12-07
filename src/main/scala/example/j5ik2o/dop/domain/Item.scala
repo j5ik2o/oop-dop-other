@@ -15,20 +15,24 @@ object ItemId {
 
 object Item {
 
-  def id(self: Item): ItemId = {
-    self("id").asInstanceOf[ItemId]
-  }
+  extension (self: Item) {
 
-  def name(self: Item): String = {
-    self("name").asInstanceOf[String]
-  }
+    def id: ItemId = {
+      self("id").asInstanceOf[ItemId]
+    }
 
-  def price(self: Item): Money = {
-    self("price").asInstanceOf[Money]
-  }
+    def name: String = {
+      self("name").asInstanceOf[String]
+    }
 
-  def itemType(self: Item): ItemType = {
-    self("type").asInstanceOf[ItemType]
+    def price: Money = {
+      self("price").asInstanceOf[Money]
+    }
+
+    def itemType: ItemType = {
+      self("type").asInstanceOf[ItemType]
+    }
+
   }
 
 }

@@ -1,7 +1,5 @@
 package example.j5ik2o.dop.domain
 
-import example.j5ik2o.common.domain.ItemType
-
 opaque type CartItem = Map[String, Any]
 opaque type CartItemId = String
 
@@ -18,9 +16,11 @@ object CartItem {
   def apply(id: CartItemId, item: Item, quantity: Quantity): CartItem =
     Map("id" -> id, "item" -> item, "quantity" -> quantity)
 
-  def id(self: CartItem): CartItemId = self("id").asInstanceOf[CartItemId]
+  extension (self: CartItem) {
+    def id: CartItemId = self("id").asInstanceOf[CartItemId]
 
-  def item(self: CartItem): Item = self("item").asInstanceOf[Item]
+    def item: Item = self("item").asInstanceOf[Item]
 
-  def quantity(self: CartItem): Quantity = self("quantity").asInstanceOf[Quantity]
+    def quantity: Quantity = self("quantity").asInstanceOf[Quantity]
+  }
 }

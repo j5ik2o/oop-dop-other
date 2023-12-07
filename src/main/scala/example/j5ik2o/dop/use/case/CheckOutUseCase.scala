@@ -14,10 +14,10 @@ class CheckOutUseCase(
     val cart = cartRepository.findById(cartId)
 
     // カートのチェックアウト
-    val (order, cartUpdated) = Cart.checkOut(cart)
+    val (order, cartUpdated) = cart.checkOut
 
     // 支払い処理
-    paymentGateway.pay(Order.totalPrice(order))
+    paymentGateway.pay(order.totalPrice)
 
     // 注文の保存
     orderRepository.store(order)

@@ -17,10 +17,14 @@ object OrderItem {
     Map("id" -> id, "item" -> item, "quantity" -> quantity)
   }
 
-  def id(self: OrderItem): OrderItemId = self("id").asInstanceOf[OrderItemId]
+  extension (self: OrderItem) {
 
-  def item(self: OrderItem): Item = self("item").asInstanceOf[Item]
+    def id: OrderItemId = self("id").asInstanceOf[OrderItemId]
 
-  def quantity(self: OrderItem): Quantity = self("quantity").asInstanceOf[Quantity]
+    def item: Item = self("item").asInstanceOf[Item]
+
+    def quantity: Quantity = self("quantity").asInstanceOf[Quantity]
+
+  }
 
 }

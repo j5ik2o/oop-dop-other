@@ -16,29 +16,31 @@ object Cart {
   def apply(id: CartId, name: String, cartItems: Vector[CartItem]): Cart =
     Map("id" -> id, "name" -> name, "cartItems" -> cartItems, "checkOuted" -> false)
 
-  def name(self: Cart): String = self("name").asInstanceOf[String]
+  extension (self: Cart) {
+    def id: CartId = self("id").asInstanceOf[CartId]
 
-  def add(self: Cart, cartItemId: CartItemId, item: Item, quantity: Quantity): Cart = {
-    val cartItem = CartItem(cartItemId, item, quantity)
-    self + ("cartItems" -> (cartItems(self) :+ cartItem))
-  }
+    def cartItems: Seq[CartItem] = self("items").asInstanceOf[Seq[CartItem]]
+    def name: String = self("name").asInstanceOf[String]
 
-  def remove(self: Cart, cartItemId: CartItemId): Cart = {
-    self + ("cartItems" -> cartItems(self).filterNot { cartItem => CartItem.id(cartItem) == cartItemId })
-  }
+    def add(cartItemId: CartItemId, item: Item, quantity: Quantity): Cart = {
+      val cartItem = CartItem(cartItemId, item, quantity)
+      self + ("cartItems" -> (cartItems :+ cartItem))
+    }
 
-  def checkOut(self: Cart): (Order, Cart) = {
-    val orderItems = Cart
-      .cartItems(self).map { cartItem =>
-        val cartItemId = CartItem.id(cartItem)
-        OrderItem(cartItemId.asInstanceOf[OrderItemId], CartItem.item(cartItem), CartItem.quantity(cartItem))
+    def remove(cartItemId: CartItemId): Cart = {
+      self + ("cartItems" -> cartItems.filterNot {
+        _.id == cartItemId
+      })
+    }
+
+    def checkOut: (Order, Cart) = {
+      val orderItems = cartItems.map { cartItem =>
+        val cartItemId = cartItem.id
+        OrderItem(cartItemId.asInstanceOf[OrderItemId], cartItem.item, cartItem.quantity)
       }.toVector
-    val orderId = id(self)
-    (Order(orderId.asInstanceOf[OrderId], orderItems), self + ("checkOuted" -> true))
+      (Order(id.asInstanceOf[OrderId], orderItems), self + ("checkOuted" -> true))
+    }
+
   }
-
-  def id(self: Cart): CartId = self("id").asInstanceOf[CartId]
-
-  def cartItems(self: Cart): Seq[CartItem] = self("items").asInstanceOf[Seq[CartItem]]
 
 }

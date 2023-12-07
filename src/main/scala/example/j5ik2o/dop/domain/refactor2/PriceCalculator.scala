@@ -14,36 +14,27 @@ object PriceCalculator {
 
   private def calculateShippingCost(baseCalculation: Item => Money)(item: Item): Money = {
     val basePrice = baseCalculation(item)
-    Money.plus(
-      basePrice,
-      Item.itemType(item) match {
-        case ItemType.Download => Money.zero()
-        case ItemType.Car => Money(50000)
-        case _ => Money.times(Item.price(item), 0.1)
-      }
-    )
+    basePrice + (Item.itemType(item) match {
+      case ItemType.Download => Money.zero()
+      case ItemType.Car => Money(50000)
+      case _ => Item.price(item) * 0.1
+    })
   }
 
   private def calculateDiscount(baseCalculation: Item => Money)(item: Item): Money = {
     val basePrice = baseCalculation(item)
-    Money.minus(
-      basePrice,
-      Money.amount(Item.price(item)) match {
-        case amount if amount >= 10000 => Money.times(Item.price(item), 0.1)
-        case amount if amount >= 5000 => Money.times(Item.price(item), 0.05)
-        case _ => Money.zero()
-      }
-    )
+    basePrice - (Money.amount(Item.price(item)) match {
+      case amount if amount >= 10000 => Item.price(item) * 0.1
+      case amount if amount >= 5000 => Item.price(item) * 0.05
+      case _ => Money.zero()
+    })
   }
 
   private def calculateTax(baseCalculation: Item => Money)(item: Item): Money = {
     val basePrice = baseCalculation(item)
-    Money.plus(
-      basePrice,
-      Item.itemType(item) match {
-        case domain.ItemType.Car => Money.times(Item.price(item), 0.2)
-        case _ => Money.times(Item.price(item), 0.1)
-      }
-    )
+    basePrice + (Item.itemType(item) match {
+      case domain.ItemType.Car => Item.price(item) * 0.2
+      case _ => Item.price(item) * 0.1
+    })
   }
 }
