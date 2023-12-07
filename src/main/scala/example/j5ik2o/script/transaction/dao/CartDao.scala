@@ -1,7 +1,6 @@
 package example.j5ik2o.script.transaction.dao
 
-import example.j5ik2o.common.domain.CartId
-import example.j5ik2o.script.transaction.model.Cart
+import example.j5ik2o.script.transaction.model.{Cart, CartId}
 
 trait CartDao {
 

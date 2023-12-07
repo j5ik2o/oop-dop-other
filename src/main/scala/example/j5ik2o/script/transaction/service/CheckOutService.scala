@@ -1,8 +1,7 @@
 package example.j5ik2o.script.transaction.service
 
-import example.j5ik2o.common.domain.{CartId, OrderId, OrderItemId, Quantity}
 import example.j5ik2o.script.transaction.dao.{CartDao, OrderDao}
-import example.j5ik2o.script.transaction.model.{Order, OrderItem, Price}
+import example.j5ik2o.script.transaction.model.*
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -16,14 +15,14 @@ class CheckOutService(val cartDao: CartDao, val orderDao: OrderDao, val paymentG
     // 注文の作成
     val orderItems = ArrayBuffer.empty[OrderItem]
     for (cartItem <- cart.cartItems) {
-      OrderItem(OrderItemId(cartItem.id.value), cartItem.item, cartItem.quantity)
+      OrderItem(OrderItemId(cartItem.id.toString), cartItem.item, cartItem.quantity)
     }
-    val order = Order(OrderId(cartId.value), orderItems.toVector)
+    val order = Order(OrderId(cartId.toString), orderItems.toVector)
 
     // 合計金額の計算
-    var totalPrice = Price.zero()
+    var totalPrice = Money.zero()
     for (orderItem <- order.orderItems) {
-      totalPrice += orderItem.item.price * Quantity(orderItem.quantity.value)
+      totalPrice += orderItem.item.price * orderItem.quantity.value
     }
     // 支払い処理
     paymentGateway.pay(totalPrice)
