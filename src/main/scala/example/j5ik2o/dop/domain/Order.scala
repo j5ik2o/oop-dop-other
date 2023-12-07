@@ -7,16 +7,20 @@ opaque type OrderId = String
 
 object OrderId {
   def apply(value: String): OrderId = value
-
   def unapply(self: OrderId): Option[String] = Some(self)
 
-  def toString(self: OrderId): String = self
+  extension (self: OrderId) {
+    def value: String = self
+  }
 }
 
 object Order {
 
   def apply(id: OrderId, orderItems: Vector[OrderItem]): Order =
     Map("id" -> id, "orderItems" -> orderItems)
+
+  def unapply(self: Order): Option[(OrderId, Vector[OrderItem])] =
+    Some((self.id, self.orderItems))
 
   extension (self: Order) {
     def id: OrderId = self("id").asInstanceOf[OrderId]

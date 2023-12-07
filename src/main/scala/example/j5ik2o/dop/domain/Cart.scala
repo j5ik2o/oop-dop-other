@@ -5,10 +5,11 @@ opaque type CartId = String
 
 object CartId {
   def apply(value: String): CartId = value
-
   def unapply(self: CartId): Option[String] = Some(self)
 
-  def toString(self: CartId): String = self
+  extension (self: CartId) {
+    def value: String = self
+  }
 }
 
 object Cart {
@@ -16,10 +17,13 @@ object Cart {
   def apply(id: CartId, name: String, cartItems: Vector[CartItem]): Cart =
     Map("id" -> id, "name" -> name, "cartItems" -> cartItems, "checkOuted" -> false)
 
+  def unapply(self: Cart): Option[(CartId, String, Vector[CartItem])] =
+    Some((self.id, self.name, self.cartItems))
+
   extension (self: Cart) {
     def id: CartId = self("id").asInstanceOf[CartId]
 
-    def cartItems: Seq[CartItem] = self("items").asInstanceOf[Seq[CartItem]]
+    def cartItems: Vector[CartItem] = self("items").asInstanceOf[Vector[CartItem]]
     def name: String = self("name").asInstanceOf[String]
 
     def add(cartItemId: CartItemId, item: Item, quantity: Quantity): Cart = {
@@ -34,11 +38,12 @@ object Cart {
     }
 
     def checkOut: (Order, Cart) = {
+      val orderId = Cart.id(self).value
       val orderItems = cartItems.map { cartItem =>
         val cartItemId = cartItem.id
-        OrderItem(cartItemId.asInstanceOf[OrderItemId], cartItem.item, cartItem.quantity)
-      }.toVector
-      (Order(id.asInstanceOf[OrderId], orderItems), self + ("checkOuted" -> true))
+        OrderItem(OrderItemId(cartItemId.value), cartItem.item, cartItem.quantity)
+      }
+      (Order(OrderId(orderId), orderItems), self + ("checkOuted" -> true))
     }
 
   }

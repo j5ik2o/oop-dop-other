@@ -8,7 +8,11 @@ opaque type OrderId = String
 object OrderId {
   def apply(value: String): OrderId = value
 
-  def toString(self: OrderId): String = self
+  def unapply(self: OrderId): Option[String] = Some(self)
+
+  extension (self: OrderId) {
+    def value: String = self
+  }
 }
 
 object Order {
@@ -16,17 +20,18 @@ object Order {
   def apply(id: String, orderItems: Vector[OrderItem]): Order =
     Map("id" -> id, "orderItems" -> orderItems)
 
+  def unapply(self: Order): Option[(OrderId, Vector[OrderItem])] =
+    Some((self.id, self.orderItems))
+
   extension (self: Order) {
     def id: OrderId = self("id").asInstanceOf[OrderId]
-
+    def orderItems: Vector[OrderItem] = self("orderItems").asInstanceOf[Vector[OrderItem]]
     def totalPrice: Money = orderItems
       .foldLeft(Money.zero()) { (acc, orderItem) =>
-        val item = OrderItem.item(orderItem)
-        val quantity = OrderItem.quantity(orderItem)
-        acc + PriceCalculator.adjustPrice(item) * Quantity.value(quantity)
+        val item = orderItem.item
+        val quantity = orderItem.quantity
+        acc + PriceCalculator.adjustPrice(item) * quantity.value
       }
-
-    def orderItems: Vector[OrderItem] = self("orderItems").asInstanceOf[Vector[OrderItem]]
   }
 
 }

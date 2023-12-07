@@ -1,6 +1,5 @@
 package example.j5ik2o.oop.domain
 
-import example.j5ik2o.common.domain.*
 import example.j5ik2o.oop.*
 
 final case class Cart(id: CartId, cartItems: CartItems, checkOuted: Boolean = false) {

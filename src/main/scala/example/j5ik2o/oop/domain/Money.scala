@@ -32,13 +32,14 @@ object Money {
 
   given int2Money: Conversion[Int, Money] = (amount: Int) => Money(amount, DefaultCurrency)
 
-  def apply(amount: BigDecimal, currency: Currency = DefaultCurrency): Money = {
-    require(amount >= 0)
-    new Money(amount, currency)
-  }
   def apply(amount: BigDecimal, currency: String): Money = {
     Money(amount, Currency.getInstance(currency))
   }
 
   def zero(currency: Currency = DefaultCurrency): Money = Money(0, currency)
+
+  def apply(amount: BigDecimal, currency: Currency = DefaultCurrency): Money = {
+    require(amount >= 0)
+    new Money(amount, currency)
+  }
 }
