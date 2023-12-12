@@ -8,6 +8,10 @@ object CartItems {
 
   extension (cartItems: CartItems) {
     infix def :+(cartItem: CartItem): CartItems = cartItems :+ cartItem
-    def toVector: Vector[CartItem]              = cartItems
+    infix def :-(cartItemId: CartItemId): CartItems = cartItems.filterNot(_.id == cartItemId)
+    def toOrderItems: OrderItems = OrderItems(cartItems.map { cartItem =>
+      val cartItemId = cartItem.id
+      OrderItem(OrderItemId(cartItemId.value), cartItem.item, cartItem.quantity)
+    }: _*)
   }
 }

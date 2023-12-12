@@ -34,20 +34,11 @@ object Cart {
       self + ("cartItems" -> (cartItems :+ cartItem))
     }
 
-    def remove(cartItemId: CartItemId): Cart = {
-      self + ("cartItems" -> cartItems.toVector.filterNot {
-        _.id == cartItemId
-      })
-    }
+    def remove(cartItemId: CartItemId): Cart =
+      self + ("cartItems" -> (cartItems :- cartItemId))
 
-    def checkOut: (Order, Cart) = {
-      val orderId = Cart.id(self).value
-      val orderItems = cartItems.toVector.map { cartItem =>
-        val cartItemId = cartItem.id
-        OrderItem(OrderItemId(cartItemId.value), cartItem.item, cartItem.quantity)
-      }
-      (Order(OrderId(orderId), OrderItems(orderItems: _*)), self + ("checkOuted" -> true))
-    }
+    def checkOut: (Order, Cart) =
+      (Order(OrderId(self.id), cartItems.toOrderItems), self + ("checkOuted" -> true))
 
   }
 
