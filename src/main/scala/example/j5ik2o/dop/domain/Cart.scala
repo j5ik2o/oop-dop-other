@@ -23,8 +23,9 @@ object Cart {
   extension (self: Cart) {
     def id: CartId = self("id").asInstanceOf[CartId]
 
-    def cartItems: Vector[CartItem] = self("items").asInstanceOf[Vector[CartItem]]
+    def cartItems: Vector[CartItem] = self("cartItems").asInstanceOf[Vector[CartItem]]
     def name: String = self("name").asInstanceOf[String]
+    def isCheckOuted: Boolean = self("checkOuted").asInstanceOf[Boolean]
 
     def add(cartItemId: CartItemId, item: Item, quantity: Quantity): Cart = {
       val cartItem = CartItem(cartItemId, item, quantity)

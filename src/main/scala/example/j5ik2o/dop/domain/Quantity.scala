@@ -11,6 +11,8 @@ object Quantity {
 
   def unapply(self: Quantity): Option[Int] = Some(self.value)
 
+  given Conversion[Int, Quantity] = (amount: Int) => Quantity(amount)
+
   extension (self: Quantity) {
     def value: Int = self("value").asInstanceOf[Int]
   }

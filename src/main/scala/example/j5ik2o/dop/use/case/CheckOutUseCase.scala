@@ -9,7 +9,7 @@ class CheckOutUseCase(
     val orderRepository: OrderRepository,
     val paymentGateway: PaymentGateway
 ) {
-  def execute(cartId: CartId): Unit = {
+  def execute(cartId: CartId): Order = {
     // カートの取得
     val cart = cartRepository.findById(cartId)
 
@@ -23,5 +23,7 @@ class CheckOutUseCase(
     orderRepository.store(order)
     // カートの更新
     cartRepository.store(cartUpdated)
+
+    order
   }
 }
