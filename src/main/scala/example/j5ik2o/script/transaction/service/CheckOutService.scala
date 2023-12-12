@@ -1,6 +1,6 @@
 package example.j5ik2o.script.transaction.service
 
-import example.j5ik2o.script.transaction.dao.{CartDao, OrderDao}
+import example.j5ik2o.script.transaction.dao.{ CartDao, OrderDao }
 import example.j5ik2o.script.transaction.model.*
 
 import scala.collection.mutable.ArrayBuffer

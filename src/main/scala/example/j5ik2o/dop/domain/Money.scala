@@ -1,6 +1,6 @@
 package example.j5ik2o.dop.domain
 
-import java.util.{Currency, Locale}
+import java.util.{ Currency, Locale }
 import scala.annotation.targetName
 
 opaque type Money = Map[String, Any]

@@ -4,11 +4,11 @@ import example.j5ik2o.common.domain.ItemType
 
 import java.net.URL
 
-opaque type Item = Map[String, Any]
+opaque type Item   = Map[String, Any]
 opaque type ItemId = String
 
 object ItemId {
-  def apply(value: String): ItemId = value
+  def apply(value: String): ItemId          = value
   def unapply(self: ItemId): Option[String] = Some(self)
 
   extension (self: ItemId) {
@@ -19,9 +19,9 @@ object ItemId {
 object Item {
 
   extension (self: Item) {
-    def id: ItemId = self("id").asInstanceOf[ItemId]
-    def name: ItemName = self("name").asInstanceOf[ItemName]
-    def price: Money = self("price").asInstanceOf[Money]
+    def id: ItemId         = self("id").asInstanceOf[ItemId]
+    def name: ItemName     = self("name").asInstanceOf[ItemName]
+    def price: Money       = self("price").asInstanceOf[Money]
     def itemType: ItemType = self("type").asInstanceOf[ItemType]
   }
 

@@ -3,7 +3,7 @@ package example.j5ik2o.oop.domain.refactor3
 import example.j5ik2o.common
 import example.j5ik2o.common.domain
 import example.j5ik2o.common.domain.ItemType
-import example.j5ik2o.oop.domain.{Item, Money}
+import example.j5ik2o.oop.domain.{ Item, Money }
 
 object PriceCalculator {
   // 送料や割引や税率を考慮した価格を返す
@@ -23,7 +23,7 @@ object PriceCalculator {
     val basePrice = baseCalculation(item)
     basePrice + (item.itemType match {
       case ItemType.Download => Money.zero()
-      case ItemType.Car => Money(50000)
+      case ItemType.Car      => Money(50000)
       case _                 => item.price * 0.1
     })
   }
@@ -33,7 +33,7 @@ object PriceCalculator {
     basePrice - (item.price.amount match {
       case amount if amount >= 10000 => item.price * 0.1
       case amount if amount >= 5000  => item.price * 0.05
-      case _ => Money.zero()
+      case _                         => Money.zero()
     })
   }
 
@@ -41,7 +41,7 @@ object PriceCalculator {
     val basePrice = baseCalculation(item)
     basePrice + (item.itemType match {
       case domain.ItemType.Car => item.price * 0.2
-      case _ => item.price * 0.1
+      case _                   => item.price * 0.1
     })
   }
 }

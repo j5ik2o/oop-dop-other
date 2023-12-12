@@ -1,10 +1,10 @@
 package example.j5ik2o.dop.domain
 
-opaque type CartItem = Map[String, Any]
+opaque type CartItem   = Map[String, Any]
 opaque type CartItemId = String
 
 object CartItemId {
-  def apply(value: String): CartItemId = value
+  def apply(value: String): CartItemId          = value
   def unapply(self: CartItemId): Option[String] = Some(self)
 
   extension (self: CartItemId) {
@@ -21,8 +21,8 @@ object CartItem {
     Some((self.id, self.item, self.quantity))
 
   extension (self: CartItem) {
-    def id: CartItemId = self("id").asInstanceOf[CartItemId]
-    def item: Item = self("item").asInstanceOf[Item]
+    def id: CartItemId     = self("id").asInstanceOf[CartItemId]
+    def item: Item         = self("item").asInstanceOf[Item]
     def quantity: Quantity = self("quantity").asInstanceOf[Quantity]
   }
 }

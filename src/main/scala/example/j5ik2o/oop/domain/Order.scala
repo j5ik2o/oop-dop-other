@@ -18,13 +18,13 @@ final case class Order(id: OrderId, orderItems: OrderItems) {
     val price = item.price
     val shippingCost = item.itemType match {
       case ItemType.Download => Money.zero()
-      case ItemType.Car => Money(50000)
+      case ItemType.Car      => Money(50000)
       case _                 => price * 0.1
     }
     val discount = price.amount match {
       case amount if amount >= 10000 => price * 0.1
       case amount if amount >= 5000  => price * 0.05
-      case _ => Money.zero()
+      case _                         => Money.zero()
     }
     val tax = item.itemType match {
       case ItemType.Car => price * 0.2

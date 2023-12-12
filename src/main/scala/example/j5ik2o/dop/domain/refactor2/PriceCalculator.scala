@@ -3,7 +3,7 @@ package example.j5ik2o.dop.domain.refactor2
 import example.j5ik2o.common
 import example.j5ik2o.common.domain
 import example.j5ik2o.common.domain.ItemType
-import example.j5ik2o.dop.domain.{Item, Money}
+import example.j5ik2o.dop.domain.{ Item, Money }
 
 object PriceCalculator {
 
@@ -16,8 +16,8 @@ object PriceCalculator {
     val basePrice = baseCalculation(item)
     basePrice + (Item.itemType(item) match {
       case ItemType.Download => Money.zero()
-      case ItemType.Car => Money(50000)
-      case _ => Item.price(item) * 0.1
+      case ItemType.Car      => Money(50000)
+      case _                 => Item.price(item) * 0.1
     })
   }
 
@@ -25,8 +25,8 @@ object PriceCalculator {
     val basePrice = baseCalculation(item)
     basePrice - (Money.amount(Item.price(item)) match {
       case amount if amount >= 10000 => Item.price(item) * 0.1
-      case amount if amount >= 5000 => Item.price(item) * 0.05
-      case _ => Money.zero()
+      case amount if amount >= 5000  => Item.price(item) * 0.05
+      case _                         => Money.zero()
     })
   }
 
@@ -34,7 +34,7 @@ object PriceCalculator {
     val basePrice = baseCalculation(item)
     basePrice + (Item.itemType(item) match {
       case domain.ItemType.Car => Item.price(item) * 0.2
-      case _ => Item.price(item) * 0.1
+      case _                   => Item.price(item) * 0.1
     })
   }
 }

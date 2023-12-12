@@ -8,7 +8,7 @@ lazy val root = (project in file("."))
     scalacOptions ++=
       Seq(
         "-feature",
-        "_",
+        "-language:_",
         "-deprecation",
         "-unchecked",
         "-encoding",
@@ -16,7 +16,9 @@ lazy val root = (project in file("."))
         "-language:_"
       ),
     libraryDependencies ++= Seq(
-      "org.scalatest" %% "scalatest" % "3.2.9" % Test,
+      "org.scalatest"  %% "scalatest"  % "3.2.9"  % Test,
       "org.scalacheck" %% "scalacheck" % "1.15.4" % Test
     )
   )
+
+addCommandAlias("fmt", ";scalafmtAll;scalafmtSbt")

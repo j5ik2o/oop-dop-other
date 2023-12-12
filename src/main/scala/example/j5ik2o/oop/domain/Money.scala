@@ -1,6 +1,6 @@
 package example.j5ik2o.oop.domain
 
-import java.util.{Currency, Locale}
+import java.util.{ Currency, Locale }
 import scala.annotation.targetName
 
 case class Money(amount: BigDecimal, currency: Currency) extends Ordered[Money] {

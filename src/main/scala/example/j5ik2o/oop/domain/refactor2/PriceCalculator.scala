@@ -33,8 +33,8 @@ class DiscountCalculator(priceCalculator: PriceCalculator) extends PriceCalculat
     price - order.calculateTotalPrice { item =>
       item.price match {
         case amount if amount >= Money(10000) => item.price * 0.1
-        case amount if amount >= Money(5000) => item.price * 0.05
-        case _ => Money.zero()
+        case amount if amount >= Money(5000)  => item.price * 0.05
+        case _                                => Money.zero()
       }
     }
   }
@@ -46,7 +46,7 @@ class ShippingCalculator(priceCalculator: PriceCalculator) extends PriceCalculat
     price + order.calculateTotalPrice { item =>
       item.itemType match {
         case ItemType.Download => Money.zero()
-        case ItemType.Car => Money(50000)
+        case ItemType.Car      => Money(50000)
         case _                 => item.price * 0.1
       }
     }

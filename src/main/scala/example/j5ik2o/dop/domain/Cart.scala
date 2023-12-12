@@ -1,10 +1,10 @@
 package example.j5ik2o.dop.domain
 
-opaque type Cart = Map[String, Any]
+opaque type Cart   = Map[String, Any]
 opaque type CartId = String
 
 object CartId {
-  def apply(value: String): CartId = value
+  def apply(value: String): CartId          = value
   def unapply(self: CartId): Option[String] = Some(self)
 
   extension (self: CartId) {
@@ -24,8 +24,8 @@ object Cart {
     def id: CartId = self("id").asInstanceOf[CartId]
 
     def cartItems: Vector[CartItem] = self("cartItems").asInstanceOf[Vector[CartItem]]
-    def name: String = self("name").asInstanceOf[String]
-    def isCheckOuted: Boolean = self("checkOuted").asInstanceOf[Boolean]
+    def name: String                = self("name").asInstanceOf[String]
+    def isCheckOuted: Boolean       = self("checkOuted").asInstanceOf[Boolean]
 
     def add(cartItemId: CartItemId, item: Item, quantity: Quantity): Cart = {
       val cartItem = CartItem(cartItemId, item, quantity)
