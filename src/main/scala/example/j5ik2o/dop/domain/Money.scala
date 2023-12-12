@@ -1,23 +1,15 @@
 package example.j5ik2o.dop.domain
 
 import java.util.{Currency, Locale}
-import scala.annotation.targetName
 
+// 原則2, 3
 opaque type Money = Map[String, Any]
 
 object Money {
-  val DefaultCurrency: Currency = Currency.getInstance(Locale.getDefault)
-  val JPY: Currency             = Currency.getInstance("JPY")
-
-  given Ordering[Money] = (x: Money, y: Money) => {
-    require(x.currency == y.currency)
-    x.amount.compare(y.amount)
-  }
-
-  given Conversion[Int, Money] = (amount: Int) => Money(amount, DefaultCurrency)
+  final val DefaultCurrency: Currency = Currency.getInstance(Locale.getDefault)
+  final val JPY: Currency = Currency.getInstance("JPY")
 
   def apply(amount: BigDecimal, currency: Currency = DefaultCurrency): Money = {
-    require(amount >= 0)
     Map("amount" -> amount, "currency" -> currency)
   }
 
@@ -29,23 +21,36 @@ object Money {
   def unapply(self: Money): Option[(BigDecimal, Currency)] =
     Some((self.amount, self.currency))
 
+  // 原則1, 3
   extension (self: Money) {
     def amount: BigDecimal = self("amount").asInstanceOf[BigDecimal]
     def currency: Currency = self("currency").asInstanceOf[Currency]
-    @targetName("plus")
+    def unary_- : Money = Money(-amount, currency)
+    def negated: Money = -self
+
     infix def +(other: Money): Money = {
       require(currency == other.currency)
       Money(amount + other.amount, currency)
     }
-    @targetName("minus")
-    infix def -(other: Money): Money = {
-      require(currency == other.currency)
-      Money(amount - other.amount, currency)
-    }
-    @targetName("times")
+    infix def -(other: Money): Money = self + -other
     infix def *(multiplier: Int): Money = Money(amount * multiplier, currency)
-    @targetName("times")
     infix def *(multiplier: Double): Money = Money(amount * multiplier, currency)
+    infix def /(divisor: Int): Money = Money(amount / divisor, currency)
+    infix def /(divisor: Double): Money = Money(amount / divisor, currency)
+
+    def plus(other: Money): Money = self + other
+    def minus(other: Money): Money = self - other
+    def times(multiplier: Int): Money = self * multiplier
+    def times(multiplier: Double): Money = self * multiplier
+    def divide(divisor: Int): Money = self / divisor
+    def divide(divisor: Double): Money = self / divisor
   }
+
+  given Ordering[Money] = (x: Money, y: Money) => {
+    require(x.currency == y.currency)
+    x.amount.compare(y.amount)
+  }
+
+  given Conversion[Int, Money] = (amount: Int) => Money(amount, DefaultCurrency)
 
 }

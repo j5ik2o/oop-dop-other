@@ -20,6 +20,9 @@ object ItemId {
 
 object Item {
 
+  def apply(id: ItemId, name: ItemName, price: Money, itemType: ItemType): Item =
+    Map("id" -> id, "name" -> name, "price" -> price, "type" -> itemType)
+
   extension (self: Item) {
     def id: ItemId         = self("id").asInstanceOf[ItemId]
     def name: ItemName     = self("name").asInstanceOf[ItemName]
@@ -34,12 +37,18 @@ opaque type GenericItem = Map[String, Any]
 object GenericItem {
 
   def apply(id: ItemId, name: ItemName, price: Money): GenericItem =
-    Map("id" -> id, "name" -> name, "price" -> price, "type" -> ItemType.Generic)
+    Item.apply(id, name, price, ItemType.Generic)
 
-  def unapply(self: GenericItem): Option[(ItemId, String, Money)] =
-    Some((self("id").asInstanceOf[ItemId], self("name").asInstanceOf[String], self("price").asInstanceOf[Money]))
+  def unapply(self: GenericItem): Option[(ItemId, ItemName, Money)] =
+    Some((Item.id(self), Item.name(self), Item.price(self)))
 
-  given Conversion[GenericItem, Item] = self => self.asInstanceOf[Item]
+  extension (self: GenericItem) {
+    def id: ItemId = Item.id(self)
+    def name: ItemName = Item.name(self)
+    def price: Money = Item.price(self)
+  }
+
+  given Conversion[GenericItem, Item] = _.asInstanceOf[Item]
 
 }
 
@@ -48,24 +57,25 @@ opaque type DownloadableItem = Map[String, Any]
 object DownloadableItem {
 
   def apply(id: ItemId, name: ItemName, url: URL, price: Money): DownloadableItem =
-    Map("id" -> id, "name" -> name, "url" -> url, "price" -> price, "type" -> ItemType.Download)
+    Item.apply(id, name, price, ItemType.Download) + ("url" -> url)
 
-  def unapply(self: DownloadableItem): Option[(ItemId, ItemName, String, Money)] =
+  def unapply(self: DownloadableItem): Option[(ItemId, ItemName, URL, Money)] =
     Some(
       (
-        self("id").asInstanceOf[ItemId],
-        self("name").asInstanceOf[ItemName],
-        self("url").asInstanceOf[String],
-        self(
-          "price"
-        ).asInstanceOf[Money]
+        Item.id(self),
+        Item.name(self),
+        self.url,
+        Item.price(self)
       )
     )
 
-  given Conversion[DownloadableItem, Item] = self => self.asInstanceOf[Item]
+  given Conversion[DownloadableItem, Item] = _.asInstanceOf[Item]
 
   extension (self: DownloadableItem) {
+    def id: ItemId = Item.id(self)
+    def name: ItemName = Item.name(self)
     def url: URL = self("url").asInstanceOf[URL]
+    def price: Money = Item.price(self)
   }
 }
 
@@ -74,10 +84,10 @@ opaque type CarItem = Map[String, Any]
 object CarItem {
 
   def apply(id: ItemId, name: ItemName, price: Money): CarItem =
-    Map("id" -> id, "name" -> name, "price" -> price, "type" -> ItemType.Car)
+    Item.apply(id, name, price, ItemType.Car)
 
   def unapply(self: CarItem): Option[(ItemId, ItemName, Money)] =
-    Some((self("id").asInstanceOf[ItemId], self("name").asInstanceOf[ItemName], self("price").asInstanceOf[Money]))
+    Some((Item.id(self), Item.name(self), Item.price(self)))
 
-  given Conversion[CarItem, Item] = self => self.asInstanceOf[Item]
+  given Conversion[CarItem, Item] = _.asInstanceOf[Item]
 }
