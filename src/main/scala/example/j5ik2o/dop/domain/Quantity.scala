@@ -14,7 +14,8 @@ object Quantity {
   given Ordering[Quantity] = (x: Quantity, y: Quantity) => {
     x.value.compare(y.value)
   }
-  given Conversion[Int, Quantity] = (amount: Int) => Quantity(amount)
+
+  given Conversion[Int, Quantity] = Quantity(_)
 
   extension (self: Quantity) {
     def value: Int = self("value").asInstanceOf[Int]

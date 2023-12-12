@@ -1,7 +1,5 @@
 package example.j5ik2o.dop.domain
 
-import scala.annotation.targetName
-
 opaque type OrderItems = Vector[OrderItem]
 
 object OrderItems {
@@ -9,7 +7,6 @@ object OrderItems {
   def unapply(items: OrderItems): Option[Vector[OrderItem]] = Some(items)
 
   extension (items: OrderItems) {
-    @targetName("add")
     infix def :+(item: OrderItem): OrderItems = items :+ item
     def toVector: Vector[OrderItem]           = items
 
