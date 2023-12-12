@@ -11,6 +11,8 @@ object ItemId {
   def apply(value: String): ItemId          = value
   def unapply(self: ItemId): Option[String] = Some(self)
 
+  given Conversion[String, ItemId] = ItemId(_)
+
   extension (self: ItemId) {
     def value: String = self
   }

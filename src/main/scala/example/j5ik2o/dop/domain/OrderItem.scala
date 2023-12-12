@@ -7,6 +7,8 @@ object OrderItemId {
   def apply(value: String): OrderItemId          = value
   def unapply(self: OrderItemId): Option[String] = Some(self)
 
+  given Conversion[String, OrderItemId] = OrderItemId(_)
+
   extension (self: OrderItemId) {
     def value: String = self
   }

@@ -1,6 +1,6 @@
 package example.j5ik2o.dop.domain
 
-import java.util.{ Currency, Locale }
+import java.util.{Currency, Locale}
 import scala.annotation.targetName
 
 opaque type Money = Map[String, Any]
@@ -9,12 +9,12 @@ object Money {
   val DefaultCurrency: Currency = Currency.getInstance(Locale.getDefault)
   val JPY: Currency             = Currency.getInstance("JPY")
 
-  given ordering: Ordering[Money] = (x: Money, y: Money) => {
-    require(currency(x) == currency(y))
-    amount(x).compare(amount(y))
+  given Ordering[Money] = (x: Money, y: Money) => {
+    require(x.currency == y.currency)
+    x.amount.compare(y.amount)
   }
 
-  given int2Money: Conversion[Int, Money] = (amount: Int) => Money(amount, DefaultCurrency)
+  given Conversion[Int, Money] = (amount: Int) => Money(amount, DefaultCurrency)
 
   def apply(amount: BigDecimal, currency: Currency = DefaultCurrency): Money = {
     require(amount >= 0)

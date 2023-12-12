@@ -7,6 +7,8 @@ object CartId {
   def apply(value: String): CartId          = value
   def unapply(self: CartId): Option[String] = Some(self)
 
+  given Conversion[String, CartId] = CartId(_)
+
   extension (self: CartId) {
     def value: String = self
   }

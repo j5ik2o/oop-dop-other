@@ -26,7 +26,7 @@ class CheckOutUseCaseSpec extends AnyFreeSpec {
   }
 
   private def newCart = {
-    val cartId                      = CartId("cart1")
+    val cartId: CartId = "cart1"
     val name                        = "cart1"
     val cartItem: CartItem          = newCartItem
     val cartItems: Vector[CartItem] = newCartItems(cartItem)
@@ -40,9 +40,9 @@ class CheckOutUseCaseSpec extends AnyFreeSpec {
   }
 
   private def newCartItem: CartItem = {
-    val cartItemId = CartItemId("item1")
-    val itemId     = ItemId("item1")
-    val itemName   = ItemName("item1")
+    val cartItemId = "item1"
+    val itemId = "item1"
+    val itemName = "item1"
     val item       = GenericItem(itemId, itemName, price = 100)
     val cartItem   = CartItem(cartItemId, item, quantity = 1);
     cartItem

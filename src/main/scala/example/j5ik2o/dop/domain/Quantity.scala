@@ -11,6 +11,9 @@ object Quantity {
 
   def unapply(self: Quantity): Option[Int] = Some(self.value)
 
+  given Ordering[Quantity] = (x: Quantity, y: Quantity) => {
+    x.value.compare(y.value)
+  }
   given Conversion[Int, Quantity] = (amount: Int) => Quantity(amount)
 
   extension (self: Quantity) {
