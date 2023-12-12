@@ -16,18 +16,18 @@ object CartId {
 
 object Cart {
 
-  def apply(id: CartId, name: String, cartItems: Vector[CartItem]): Cart =
+  def apply(id: CartId, name: String, cartItems: CartItems): Cart =
     Map("id" -> id, "name" -> name, "cartItems" -> cartItems, "checkOuted" -> false)
 
-  def unapply(self: Cart): Option[(CartId, String, Vector[CartItem])] =
+  def unapply(self: Cart): Option[(CartId, String, CartItems)] =
     Some((self.id, self.name, self.cartItems))
 
   extension (self: Cart) {
     def id: CartId = self("id").asInstanceOf[CartId]
 
-    def cartItems: Vector[CartItem] = self("cartItems").asInstanceOf[Vector[CartItem]]
-    def name: String                = self("name").asInstanceOf[String]
-    def isCheckOuted: Boolean       = self("checkOuted").asInstanceOf[Boolean]
+    def cartItems: CartItems = self("cartItems").asInstanceOf[CartItems]
+    def name: String = self("name").asInstanceOf[String]
+    def isCheckOuted: Boolean = self("checkOuted").asInstanceOf[Boolean]
 
     def add(cartItemId: CartItemId, item: Item, quantity: Quantity): Cart = {
       val cartItem = CartItem(cartItemId, item, quantity)
@@ -35,18 +35,18 @@ object Cart {
     }
 
     def remove(cartItemId: CartItemId): Cart = {
-      self + ("cartItems" -> cartItems.filterNot {
+      self + ("cartItems" -> cartItems.toVector.filterNot {
         _.id == cartItemId
       })
     }
 
     def checkOut: (Order, Cart) = {
       val orderId = Cart.id(self).value
-      val orderItems = cartItems.map { cartItem =>
+      val orderItems = cartItems.toVector.map { cartItem =>
         val cartItemId = cartItem.id
         OrderItem(OrderItemId(cartItemId.value), cartItem.item, cartItem.quantity)
       }
-      (Order(OrderId(orderId), orderItems), self + ("checkOuted" -> true))
+      (Order(OrderId(orderId), OrderItems(orderItems: _*)), self + ("checkOuted" -> true))
     }
 
   }

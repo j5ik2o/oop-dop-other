@@ -1,6 +1,6 @@
 package example.j5ik2o.dop.domain.refactor1
 
-import example.j5ik2o.dop.domain.{ Money, OrderItem, Quantity }
+import example.j5ik2o.dop.domain.{Money, OrderItems}
 
 opaque type Order   = Map[String, Any]
 opaque type OrderId = String
@@ -17,21 +17,16 @@ object OrderId {
 
 object Order {
 
-  def apply(id: OrderId, orderItems: Vector[OrderItem]): Order =
+  def apply(id: OrderId, orderItems: OrderItems): Order =
     Map("id" -> id, "orderItems" -> orderItems)
 
-  def unapply(self: Order): Option[(OrderId, Vector[OrderItem])] =
+  def unapply(self: Order): Option[(OrderId, OrderItems)] =
     Some((self.id, self.orderItems))
 
   extension (self: Order) {
-    def id: OrderId                   = self("id").asInstanceOf[OrderId]
-    def orderItems: Vector[OrderItem] = self("orderItems").asInstanceOf[Vector[OrderItem]]
-    def totalPrice: Money = orderItems
-      .foldLeft(Money.zero()) { (acc, orderItem) =>
-        val item     = orderItem.item
-        val quantity = orderItem.quantity
-        acc + PriceCalculator.adjustPrice(item) * quantity.value
-      }
+    def id: OrderId = self("id").asInstanceOf[OrderId]
+    def orderItems: OrderItems = self("orderItems").asInstanceOf[OrderItems]
+    def totalPrice: Money = orderItems.calculateTotalPrice(PriceCalculator.adjustPrice)
   }
 
 }
