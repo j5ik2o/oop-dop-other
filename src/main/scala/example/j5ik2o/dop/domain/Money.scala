@@ -9,11 +9,10 @@ object Money {
   final val DefaultCurrency: Currency = Currency.getInstance(Locale.getDefault)
   final val JPY: Currency = Currency.getInstance("JPY")
 
-  def apply(amount: BigDecimal, currency: Currency = DefaultCurrency): Money = {
-    Map("amount" -> amount, "currency" -> currency)
-  }
-
   def zero(currency: Currency = DefaultCurrency): Money = Money(0, currency)
+
+  def apply(amount: BigDecimal, currency: Currency = DefaultCurrency): Money =
+    Map("amount" -> amount, "currency" -> currency)
 
   def apply(amount: BigDecimal, currency: String): Money =
     Money(amount, Currency.getInstance(currency))
