@@ -26,10 +26,8 @@ object Money {
     // 原則4
     def amount: BigDecimal = self("amount").asInstanceOf[BigDecimal]
     def currency: Currency = self("currency").asInstanceOf[Currency]
-    
-    def unary_- : Money = Money(-amount, currency)
-    def negated: Money = -self
 
+    // 二項演算子を定義。 例) val m3: Money = m1 + m2
     infix def +(other: Money): Money = {
       require(currency == other.currency)
       Money(amount + other.amount, currency)
@@ -40,6 +38,10 @@ object Money {
     infix def /(divisor: Int): Money = Money(amount / divisor, currency)
     infix def /(divisor: Double): Money = Money(amount / divisor, currency)
 
+    // 単項演算子を定義。 例) val m2: Money = -m1
+    def unary_- : Money = Money(-amount, currency)
+    
+    def negated: Money = -self
     def plus(other: Money): Money = self + other
     def minus(other: Money): Money = self - other
     def times(multiplier: Int): Money = self * multiplier
@@ -48,11 +50,13 @@ object Money {
     def divide(divisor: Double): Money = self / divisor
   }
 
+  // Moneyどうしの比較
   given Ordering[Money] = (x: Money, y: Money) => {
     require(x.currency == y.currency)
     x.amount.compare(y.amount)
   }
 
+  // IntからMoneyへの暗黙的型変換。 例) val m1: Money = 100
   given Conversion[Int, Money] = (amount: Int) => Money(amount, DefaultCurrency)
 
 }
