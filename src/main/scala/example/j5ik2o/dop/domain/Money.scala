@@ -2,6 +2,14 @@ package example.j5ik2o.dop.domain
 
 import java.util.{Currency, Locale}
 
+/**
+データ指向プログラミングの原則
+原則1 コード（動作）をデータから切り離す
+原則2 データを汎用的なデータ構造で表現する
+原則3 データをイミュータブル（不変）として扱う
+原則4 データスキーマをデータ表現から切り離す
+*/
+
 // 原則2, 3
 opaque type Money = Map[String, Any]
 
