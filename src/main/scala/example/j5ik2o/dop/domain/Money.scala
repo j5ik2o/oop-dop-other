@@ -23,8 +23,10 @@ object Money {
 
   // 原則1, 3
   extension (self: Money) {
+    // 原則4
     def amount: BigDecimal = self("amount").asInstanceOf[BigDecimal]
     def currency: Currency = self("currency").asInstanceOf[Currency]
+    
     def unary_- : Money = Money(-amount, currency)
     def negated: Money = -self
 
